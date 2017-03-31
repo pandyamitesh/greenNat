@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ScreenService } from "fw/services/screen.service";
-import { MenuService } from "fw/services/menu.service";
+
+import { ScreenService } from '../services/screen.service';
+import { MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'fw-title-bar',
@@ -9,7 +10,8 @@ import { MenuService } from "fw/services/menu.service";
 })
 export class TitleBarComponent implements OnInit {
 
-  constructor(private screenService: ScreenService, private menuService: MenuService) { }
+  constructor(private screenService: ScreenService,
+              private menuService: MenuService) { }
 
   ngOnInit() {
   }

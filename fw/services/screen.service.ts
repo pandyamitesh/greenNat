@@ -1,7 +1,7 @@
 import { HostListener, Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-//@Injectable()
+@Injectable()
 export class ScreenService {
     private resizeSource = new Subject<null>();
     resize$ = this.resizeSource.asObservable();
@@ -22,11 +22,11 @@ export class ScreenService {
         }
     }
 
-    isLarge(): boolean {
+    isLarge() : boolean {
         return this.screenWidth >= this.largeBreakpoint;
     }
 
-    onResize($event): void {
+    onResize($event) : void {
         this.screenWidth = window.innerWidth;
         this.screenHeight = window.innerHeight;
         this.resizeSource.next();

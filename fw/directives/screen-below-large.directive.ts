@@ -1,16 +1,18 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { ScreenService } from '../services/screen.service';
-import { Subscription } from "rxjs/Subscription";
-@Directive({ selector: '[screenBelowLarge]' })
-export class ScreenBelowLarge {
-  private hasView = false;
-  private screenSubscriprion: Subscription;
-  constructor(private viewContainer: ViewContainerRef,
-    private template: TemplateRef<Object>,
-    private screenService: ScreenService) {
+import { Subscription } from 'rxjs/Subscription';
 
-    screenService.resize$.subscribe(() => this.onResize());
+@Directive({selector: '[screenBelowLarge]'})
+export class ScreenBelowLarge implements OnDestroy {
+  private hasView = false;
+  private screenSubscription: Subscription;
+
+  constructor(private viewContainer: ViewContainerRef, 
+                private template: TemplateRef<Object>,
+                private screenService: ScreenService) {
+
+    this.screenSubscription = screenService.resize$.subscribe(() => this.onResize());
 
   }
 
@@ -18,7 +20,7 @@ export class ScreenBelowLarge {
   set screenBelowLarge(condition) {
     // ignore the passed condition and set it based on screen size
     condition = this.screenService.screenWidth < this.screenService.largeBreakpoint;
-
+    
     if (condition && !this.hasView) {
       this.hasView = true;
       this.viewContainer.createEmbeddedView(this.template);
@@ -27,9 +29,11 @@ export class ScreenBelowLarge {
       this.viewContainer.clear();
     }
   }
+
   ngOnDestroy() {
-    this.screenSubscriprion.unsubscribe();
+    this.screenSubscription.unsubscribe();
   }
+
   onResize() {
     // trigger the setter
     this.screenBelowLarge = false;
